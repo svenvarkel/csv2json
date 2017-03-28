@@ -26,6 +26,9 @@ var usage = [
   '  -t, --tsv',
   '    Use tab as separator, overrides separator flag.',
   '',
+  '  -n <terminator> , --newline <terminator>',
+  '    Use custom newline terminator. The default is UNIX-style \n',
+  '',
   '  <input file>',
   '    CSV file to read data from.',
   '    If unspecified or a dash (“-”), use the standard input.',
@@ -42,13 +45,14 @@ function main (args) {
 
   args = minimist(args, {
     boolean: ['dynamic-typing', 'help', 'tsv'],
-    string: 'separator',
+    string: ['separator', 'newline'],
 
     alias: {
       help: 'h',
       d: 'dynamic-typing',
       separator: 's',
-      tsv: 't'
+      tsv: 't',
+      newline: 'n'
     }
   })
 
@@ -67,6 +71,7 @@ function main (args) {
   return eventToPromise(pump([
     input,
     csv2json({
+      newline: args.newline || '\n',
       dynamicTyping: args['dynamic-typing'],
       separator: args.tsv ? '\t' : args.separator
     }),
