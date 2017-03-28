@@ -41,6 +41,7 @@ function csv2json (opts) {
   return pumpify([
     stripBomStream(),
     parseCsv({
+      newline: opts.newline || '\n',
       separator: opts.separator
     }),
     (function () {
